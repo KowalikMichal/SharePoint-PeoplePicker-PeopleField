@@ -30,7 +30,7 @@ function create() {
 		var itemCreateInfo = new SP.ListItemCreationInformation();
 		this.oListItem = oList.addItem(itemCreateInfo);
 
-		oListItem.set_item('Title', 'Example tile');
+		oListItem.set_item('Title', 'Example title');
 		oListItem.set_item('PeopleFiled', userMail);
 		
 		oListItem.update();
