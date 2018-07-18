@@ -9,14 +9,13 @@ $(function(){
 //initializePeoplePicker
 function initializePeoplePicker(peoplePickerElementId, GroupID) {
 	var schema = {};
-	schema['PrincipalAccountType'] = 'User,DL,SecGroup,SPGroup';
-	schema['SearchPrincipalSource'] = 15;
-	schema['ResolvePrincipalSource'] = 15;
-	schema['AllowMultipleValues'] = true;
-	schema['MaximumEntitySuggestions'] = 50;
-	schema['Width'] = '480px';
-	schema['SharePointGroupID'] = GroupID; //get user only from group
-
+		schema['PrincipalAccountType'] = 'User,DL,SecGroup,SPGroup';
+		schema['SearchPrincipalSource'] = 15;
+		schema['ResolvePrincipalSource'] = 15;
+		schema['AllowMultipleValues'] = true;
+		schema['MaximumEntitySuggestions'] = 50;
+		schema['Width'] = '480px';
+		schema['SharePointGroupID'] = GroupID; //get user only from group
 	this.SPClientPeoplePicker_InitStandaloneControlWrapper(peoplePickerElementId, null, schema);
 }
 
@@ -28,30 +27,27 @@ function create() {
 		var clientContext = new SP.ClientContext.get_current();	
 		var oList = clientContext.get_web().get_lists().getByTitle('ListTitle');
 		var itemCreateInfo = new SP.ListItemCreationInformation();
+		var PeopleId = new SP.FieldLookupValue();
+			PeopleId.set_lookupId(1);
 		this.oListItem = oList.addItem(itemCreateInfo);
-
-		oListItem.set_item('Title', 'Example title');
-		oListItem.set_item('PeopleFiled', userMail);
-		
+			oListItem.set_item('Title', 'Example title');
+			oListItem.set_item('PeopleFiled', userMail); //set by email
+			oListItem.set_item('_x0061_tj7', PeopleId); //set by id
 		oListItem.update();
-		clientContext.executeQueryAsync(Function.createDelegate(this, this.onQuerySucceededCreate), Function.createDelegate(this, this.onQueryFailedCreate));
+			clientContext.executeQueryAsync(
+				Function.createDelegate(this, function(){
+					alert('Succeeded created record!');
+				}),
+				Function.createDelegate(this, function(){
+					alert('Request failed. ' + args.get_message() + '\n' + args.get_stackTrace());
+			}));
 	});
-}
-
-function onQuerySucceededCreate() {
-	alert('Succeeded created record!');
-}
-
-function onQueryFailedCreate(sender, args) {
-	alert('Request failed. ' + args.get_message() + '\n' + args.get_stackTrace());
 }
 
 function getUserInfo() {
 	var peoplePicker = this.SPClientPeoplePicker.SPClientPeoplePickerDict.peoplePickerITDC_TopSpan;
-
 	var users = peoplePicker.GetAllUserInfo();
 	var userMail = [];
-	
 	$.each(users, function(index, element){
 		 $.when(GetUserIdFromUserName(element.Key)).done(function(data){
 			$.map(data, function(n){
