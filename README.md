@@ -1,4 +1,4 @@
-#SharePoint initialization people picker and add multiple peoples to SharePoint list.
+# SharePoint initialization people picker and add multiple peoples to SharePoint list.
 
 ## In HTML require to have:<br />
 ```
